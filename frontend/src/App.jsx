@@ -7,6 +7,8 @@ import ProductsPage from './pages/ProductsPage'
 import OrdersPage from './pages/OrdersPage'
 import LicensesPage from './pages/LicensesPage'
 import SettingsPage from './pages/SettingsPage'
+import BlogPage from './pages/BlogPage'
+import BlogDetailPage from './pages/BlogDetailPage'
 
 function PrivateRoute({ children }) {
   const { isAuthenticated, loading } = useAuth()
@@ -28,7 +30,12 @@ function PrivateRoute({ children }) {
 export default function App() {
   return (
     <Routes>
+      {/* Public routes */}
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/blog" element={<BlogPage />} />
+      <Route path="/blog/:slug" element={<BlogDetailPage />} />
+
+      {/* Protected admin routes */}
       <Route
         path="/"
         element={
@@ -42,7 +49,9 @@ export default function App() {
         <Route path="orders" element={<OrdersPage />} />
         <Route path="licenses" element={<LicensesPage />} />
         <Route path="settings" element={<SettingsPage />} />
+        <Route path="blog-admin" element={<BlogPage />} />
       </Route>
+
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

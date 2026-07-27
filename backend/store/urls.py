@@ -12,7 +12,8 @@ urlpatterns = [
     path('api/orders/', include('orders.urls')),
     path('api/licenses/', include('licenses.urls')),
     path('api/dashboard/', include('dashboard.urls')),
-    path('api/auth/', include('auth_app.urls')),
+    path('api/blog/', include('blog.urls')),
+    path('api/auth/', include('nash_auth.urls')),
 ]
 
 if settings.DEBUG:

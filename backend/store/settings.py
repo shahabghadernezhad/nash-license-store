@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     'licenses.apps.LicensesConfig',
     'dashboard.apps.DashboardConfig',
-    'auth.apps.AuthConfig',
+    'nash_auth.apps.NashAuthConfig',
+    'blog.apps.BlogConfig',
 ]
 
 MIDDLEWARE = [

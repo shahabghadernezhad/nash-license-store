@@ -9,6 +9,7 @@ import {
   Shield,
   ChevronLeft,
   LogOut,
+  BookOpen,
 } from 'lucide-react'
 
 const navItems = [
@@ -16,6 +17,7 @@ const navItems = [
   { path: '/products', label: 'محصولات', icon: Package },
   { path: '/orders', label: 'سفارشات', icon: ShoppingCart },
   { path: '/licenses', label: 'لایسنس‌ها', icon: KeyRound },
+  { path: '/blog-admin', label: 'وبلاگ', icon: BookOpen },
   { path: '/settings', label: 'تنظیمات', icon: Settings },
 ]
 
