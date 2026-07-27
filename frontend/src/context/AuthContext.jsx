@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react'
-import { authApi } from '../services/api'
-import toast from 'react-hot-toast'
 
 const AuthContext = createContext(null)
+
+// Demo credentials for GitHub Pages
+const DEMO_USER = { username: 'admin', email: 'admin@nash-security.com', is_superuser: true, roles: ['admin'] }
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
@@ -11,66 +12,58 @@ export function AuthProvider({ children }) {
 
   // Check for existing token on mount
   useEffect(() => {
-    const token = localStorage.getItem('access_token')
-    const savedUser = localStorage.getItem('user')
-
-    if (token && savedUser) {
+    const savedUser = localStorage.getItem('nash_user')
+    if (savedUser) {
       try {
         const parsed = JSON.parse(savedUser)
         setUser(parsed)
         setIsAuthenticated(true)
       } catch {
-        localStorage.removeItem('user')
-        localStorage.removeItem('access_token')
-        localStorage.removeItem('refresh_token')
+        localStorage.removeItem('nash_user')
       }
     }
     setLoading(false)
   }, [])
 
-  const login = useCallback(async (email, password) => {
-    try {
-      const response = await authApi.login(email, password)
-      const { access, refresh, user: userData } = response.data
-
-      localStorage.setItem('access_token', access)
-      localStorage.setItem('refresh_token', refresh)
-      localStorage.setItem('user', JSON.stringify(userData))
-
+  const login = useCallback(async (username, password) => {
+    // Demo mode: accept admin/admin12345
+    if (username === 'admin' && password === 'admin12345') {
+      const userData = { ...DEMO_USER, username }
+      localStorage.setItem('nash_token', 'demo-token-12345')
+      localStorage.setItem('nash_user', JSON.stringify(userData))
       setUser(userData)
       setIsAuthenticated(true)
-
-      toast.success('ورود موفقیت‌آمیز بود')
       return true
-    } catch (error) {
-      const message =
-        error.response?.data?.detail ||
-        error.response?.data?.message ||
-        'خطا در ورود به سیستم'
-      toast.error(message)
-      return false
     }
-  }, [])
 
-  const logout = useCallback(async () => {
+    // Try real API (when backend is available)
     try {
-      await authApi.logout()
+      const res = await fetch('/api/auth/login/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        localStorage.setItem('nash_token', data.access)
+        localStorage.setItem('nash_user', JSON.stringify(data.user || { username }))
+        setUser(data.user || { username })
+        setIsAuthenticated(true)
+        return true
+      }
     } catch {
-      // Ignore logout errors
-    } finally {
-      localStorage.removeItem('access_token')
-      localStorage.removeItem('refresh_token')
-      localStorage.removeItem('user')
-      setUser(null)
-      setIsAuthenticated(false)
-      toast.success('با موفقیت خارج شدید')
+      // No backend available
     }
+
+    return false
   }, [])
 
-  const updateProfile = useCallback((data) => {
-    setUser((prev) => ({ ...prev, ...data }))
-    localStorage.setItem('user', JSON.stringify({ ...user, ...data }))
-  }, [user])
+  const logout = useCallback(() => {
+    localStorage.removeItem('nash_token')
+    localStorage.removeItem('nash_user')
+    setUser(null)
+    setIsAuthenticated(false)
+  }, [])
 
   const value = {
     user,
@@ -78,7 +71,6 @@ export function AuthProvider({ children }) {
     isAuthenticated,
     login,
     logout,
-    updateProfile,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
