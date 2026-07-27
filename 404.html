@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script>
+    // SPA redirect for GitHub Pages
+    // Takes the current path and redirects to index.html with the path as hash
+    var path = window.location.pathname + window.location.search + window.location.hash;
+    // Replace /nash-license-store/ with empty string for root
+    path = path.replace('/nash-license-store', '');
+    // Redirect to root with path as hash
+    window.location.href = '/nash-license-store/#' + path;
+  </script>
+</head>
+<body>
+  Redirecting...
+</body>
+</html>
