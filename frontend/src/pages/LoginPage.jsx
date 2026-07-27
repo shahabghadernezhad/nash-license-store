@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { Shield, Eye, EyeOff, Loader2 } from 'lucide-react'
 
@@ -21,7 +21,7 @@ export default function LoginPage() {
     try {
       const success = await login(email, password)
       if (success) {
-        navigate('/', { replace: true })
+        navigate('/admin', { replace: true })
       } else {
         setError('ایمیل یا رمز عبور اشتباه است')
       }
