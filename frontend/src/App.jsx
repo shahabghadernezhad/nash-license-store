@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import Layout from './components/Layout'
+import HomePage from './pages/HomePage'
+import AboutPage from './pages/AboutPage'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import ProductsPage from './pages/ProductsPage'
@@ -18,7 +20,7 @@ function PrivateRoute({ children }) {
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
-          <p className="text-slate-400 font-vazir">در حال بارگذاری...</p>
+          <p className="text-slate-400">در حال بارگذاری...</p>
         </div>
       </div>
     )
@@ -31,13 +33,15 @@ export default function App() {
   return (
     <Routes>
       {/* Public routes */}
+      <Route path="/" element={<HomePage />} />
+      <Route path="/about" element={<AboutPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/blog" element={<BlogPage />} />
       <Route path="/blog/:slug" element={<BlogDetailPage />} />
 
       {/* Protected admin routes */}
       <Route
-        path="/"
+        path="/admin"
         element={
           <PrivateRoute>
             <Layout />
@@ -49,7 +53,7 @@ export default function App() {
         <Route path="orders" element={<OrdersPage />} />
         <Route path="licenses" element={<LicensesPage />} />
         <Route path="settings" element={<SettingsPage />} />
-        <Route path="blog-admin" element={<BlogPage />} />
+        <Route path="blog" element={<BlogPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

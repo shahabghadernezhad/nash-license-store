@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { Shield, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Shield, Eye, EyeOff, Loader2, LogIn } from 'lucide-react'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('admin')
+  const [password, setPassword] = useState('admin12345')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { login } = useAuth()
@@ -13,10 +13,10 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!email || !password) return
+    if (!username || !password) return
 
     setIsLoading(true)
-    const success = await login(email, password)
+    const success = await login(username, password)
     setIsLoading(false)
 
     if (success) {
@@ -48,19 +48,19 @@ export default function LoginPage() {
           <h2 className="text-lg font-bold text-white mb-6">ورود به حساب</h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
+            {/* Username */}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
-                ایمیل
+                نام کاربری
               </label>
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="input-field"
-                placeholder="admin@nash.com"
+                placeholder="admin"
                 required
-                autoComplete="email"
+                autoComplete="username"
                 dir="ltr"
                 style={{ textAlign: 'left' }}
               />
@@ -93,10 +93,17 @@ export default function LoginPage() {
               </div>
             </div>
 
+            {/* Demo hint */}
+            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl px-4 py-3">
+              <p className="text-blue-400 text-xs text-center">
+                🔑 رمز پیش‌فرض: <strong>admin</strong> / <strong>admin12345</strong>
+              </p>
+            </div>
+
             {/* Submit */}
             <button
               type="submit"
-              disabled={isLoading || !email || !password}
+              disabled={isLoading || !username || !password}
               className="w-full btn-primary justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
@@ -105,7 +112,10 @@ export default function LoginPage() {
                   <span>در حال ورود...</span>
                 </>
               ) : (
-                <span>ورود</span>
+                <>
+                  <LogIn className="w-5 h-5" />
+                  <span>ورود</span>
+                </>
               )}
             </button>
           </form>
@@ -113,7 +123,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p className="text-center text-slate-600 text-xs mt-6">
-          © 2024 Nash Security — تمامی حقوق محفوظ است
+          © 2025 Nash Security — تمامی حقوق محفوظ است
         </p>
       </div>
     </div>
