@@ -5,12 +5,19 @@
   <title>Redirecting...</title>
   <script>
     // SPA redirect for GitHub Pages
-    // Takes the current path and redirects to index.html with the path as hash
-    var path = window.location.pathname + window.location.search + window.location.hash;
-    // Replace /nash-license-store/ with empty string for root
-    path = path.replace('/nash-license-store', '');
-    // Redirect to root with path as hash
-    window.location.href = '/nash-license-store/#' + path;
+    // When GitHub Pages serves 404.html for a missing route like /login,
+    // we redirect to index.html with the path as hash
+    var path = window.location.pathname;
+    var search = window.location.search;
+    var hash = window.location.hash;
+    
+    // Remove the repo name from path if present
+    if (path.startsWith('/nash-license-store/')) {
+      path = path.substring('/nash-license-store'.length);
+    }
+    
+    // Redirect to index.html with the full path as hash
+    window.location.href = '/nash-license-store/' + '#' + path + search + hash;
   </script>
 </head>
 <body>
