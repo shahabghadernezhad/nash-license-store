@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { Shield, Eye, EyeOff, Loader2 } from 'lucide-react'
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('admin')
+  const [email, setEmail] = useState('admin@nash-security.com')
   const [password, setPassword] = useState('admin12345')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -15,17 +15,17 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    if (!username || !password) return
+    if (!email || !password) return
 
     setIsLoading(true)
     try {
-      const success = await login(username, password)
+      const success = await login(email, password)
       if (success) {
         navigate('/', { replace: true })
       } else {
-        setError('نام کاربری یا رمز عبور اشتباه است')
+        setError('ایمیل یا رمز عبور اشتباه است')
       }
-    } catch (err) {
+    } catch {
       setError('خطا در اتصال به سرور')
     }
     setIsLoading(false)
@@ -34,12 +34,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Back to home */}
         <Link to="/" className="text-slate-400 hover:text-white text-sm mb-6 inline-flex items-center gap-1">
           ← بازگشت به خانه
         </Link>
 
-        {/* Logo */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-blue-500/25">
             <Shield className="w-8 h-8 text-white" />
@@ -48,7 +46,6 @@ export default function LoginPage() {
           <p className="text-slate-400 text-sm">پنل مدیریت فروشگاه لایسنس</p>
         </div>
 
-        {/* Login Card */}
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8">
           <h2 className="text-lg font-bold text-white mb-6">ورود به حساب</h2>
 
@@ -59,21 +56,20 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Username */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">نام کاربری</label>
+              <label className="block text-sm font-medium text-slate-300 mb-2">ایمیل</label>
               <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full bg-slate-700/50 border border-slate-600/50 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 transition-colors"
-                placeholder="admin"
+                placeholder="admin@nash-security.com"
                 required
-                autoComplete="username"
+                autoComplete="email"
+                dir="ltr"
               />
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">رمز عبور</label>
               <div className="relative">
@@ -85,6 +81,7 @@ export default function LoginPage() {
                   placeholder="••••••••"
                   required
                   autoComplete="current-password"
+                  dir="ltr"
                 />
                 <button
                   type="button"
@@ -96,17 +93,15 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Demo hint */}
             <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl px-4 py-3">
-              <p className="text-blue-400 text-xs text-center">
-                🔑 رمز پیش‌فرض: <strong>admin</strong> / <strong>admin12345</strong>
-              </p>
+              <p className="text-blue-400 text-xs text-center">🔑 اطلاعات ورود:</p>
+              <p className="text-blue-300 text-xs text-center mt-1">ایمیل: <strong>admin@nash-security.com</strong></p>
+              <p className="text-blue-300 text-xs text-center">رمز: <strong>admin12345</strong></p>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
-              disabled={isLoading || !username || !password}
+              disabled={isLoading || !email || !password}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isLoading ? (
@@ -121,9 +116,7 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <p className="text-center text-slate-600 text-xs mt-6">
-          © 2025 Nash Security — تمامی حقوق محفوظ است
-        </p>
+        <p className="text-center text-slate-600 text-xs mt-6">© 2025 Nash Security</p>
       </div>
     </div>
   )
